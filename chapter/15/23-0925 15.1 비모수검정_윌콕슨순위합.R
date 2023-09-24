@@ -3,58 +3,52 @@
 #
 library(tidyverse)
 library(car)
-
+library(psych)
+library(pastecs)
+library(gt)
+#Rcmdr 
 #install.packages("Rcmdr", dependencies = T)
-library(Rcmdr)
+#library(Rcmdr)
 #Rcmdr::Commander() #커맨더 재실행
 
-#
- # read.table("./dataset/chapter_15/Drug.dat", 
- #            header = T) -> drug
-
+#dat 파일 열기
+# read.table("./dataset/chapter_15/Drug.dat", 
+#            header = T) -> drug
 read_delim("./dataset/chapter_15/Drug.dat") -> drug
 
+#str()
 drug |> view()
 drug |> glimpse()
 drug |> str()
 drug |> hist()
 drug |> plot()
-drug |> ggplot(aes(x = V1)) +
-  geom_point(aes(y = V2), stat = "identity") +
-  geom_point(aes(y = V3), stat = "identity")
 
-# book 828p
+
+# book 828p ------------------------------------------------
 drug |> 
   pivot_longer(cols = 2:3, 
                names_to = "BDI", 
                values_to = "Value") -> drug2
 
-drug2 |> 
-  ggplot(aes(x = drug, y = Value)) +
-  geom_jitter(width = .1)
-
+# EDA
 drug2 |> 
   ggplot(aes(x = BDI, y = Value)) +
-  geom_jitter(width = .1)
+  geom_jitter(width = .1) +
+  facet_wrap(.~drug)
 
-#
-drug$wedsBDI |> sort() |> sum()
-drug[,c(1,3)] #wed
-drug[,c(1,2)] #sun
-drug
-#
-drug[,c(1,3)] |> arrange(wedsBDI)
+
+#합계 구하기
 c(1,2,3.5,3.5,5,6,7,8,9,14) |> sum()
 
-#
-drug |> summary()
-shapiro.test(drug$sundayBDI)
-shapiro.test(drug$wedsBDI)
 
 #
 drug |> 
   pivot_wider(names_from = drug, 
               values_from = drug)
+
+#stat.desc()
+stat.desc(drug$sundayBDI, basic = T, norm = F)
+
 
 # Ecstasy #weds
 drug |> 
@@ -128,13 +122,22 @@ drug |>
   plot()
   
 
+drug$sundayBDI |> describe()
+drug$sundayBDI |> stat.desc()
 
 
+# 레빈 검정 -----------------------------------------------
+leveneTest(drug$sundayBDI, drug$wedsBDI)
+leveneTest(drug$sundayBDI, drug$wedsBDI, center = mean)
 
 
+#윌콕슨 순위 합
+wilcox.test(x = drug$sundayBDI)
+drugData |> wilcox.test(sundayBDI ~ drug, exact = F)
 
-
-
+drug -> drugData
+wilcox.test(sundayBDI ~ drug, data = drugData, exact = F)
+wilcox.test(wedsBDI ~ drug, data = drugData, exact = F)
 
 
 
