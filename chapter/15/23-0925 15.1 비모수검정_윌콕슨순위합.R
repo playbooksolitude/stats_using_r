@@ -32,9 +32,9 @@ drug |>
 
 # EDA
 drug2 |> 
-  ggplot(aes(x = BDI, y = Value)) +
+  ggplot(aes(x = drug, y = Value)) +
   geom_jitter(width = .1) +
-  facet_wrap(.~drug)
+  facet_wrap(.~BDI)
 
 
 #합계 구하기
@@ -77,6 +77,11 @@ drug |>
 drug |> 
   filter(drug == "Ecstasy") |> with(sundayBDI) |> 
   qqPlot()
+
+      #
+      drug |> 
+        filter(drug == "Ecstasy") |> with(sundayBDI) |> 
+        barplot()
 
 
 # -------------------------------------------------------- #

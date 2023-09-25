@@ -29,9 +29,15 @@ drug
 dlf |> 
   ggplot(aes(sample = dlf$day1)) + 
   stat_qq() +
-  stat_qq_line() +
-  geom_qq()
+  stat_qq_line()
+#  geom_qq() +
+#  geom_qq_line()
 
+#
+qqplot.day1
+
+#
+shapiro.test(dlf$day1)
 dlf$day1 |> qqPlot()
 dlf$day2 |> qqPlot()
 dlf$day3 |> qqPlot()
