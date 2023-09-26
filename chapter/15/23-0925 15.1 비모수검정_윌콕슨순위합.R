@@ -47,7 +47,10 @@ drug |>
               values_from = drug)
 
 #stat.desc()
-stat.desc(drug$sundayBDI, basic = T, norm = F)
+psych::describe(drug)
+
+#
+pastecs::stat.desc(drug$sundayBDI, basic = T, norm = F)
 
 
 # Ecstasy #weds
@@ -143,6 +146,16 @@ drugData |> wilcox.test(sundayBDI ~ drug, exact = F)
 drug -> drugData
 wilcox.test(sundayBDI ~ drug, data = drugData, exact = F)
 wilcox.test(wedsBDI ~ drug, data = drugData, exact = F)
+
+
+#table
+drug |> summary()
+drug |> describe()
+
+
+
+
+
 
 
 
