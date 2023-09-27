@@ -4,10 +4,9 @@
 library(tidyverse)
 library(Hmisc)
 
-
 #
 (read_delim("./dataset/09/SpiderLong.dat") -> spiderlong)
-read_delim("./dataset/09/SpiderWide.dat") -> spiderwider
+(read_delim("./dataset/09/SpiderWide.dat") -> spiderwider)
 
 #
 spiderlong;spiderwider
@@ -53,8 +52,8 @@ bar + stat_summary(fun.data = median_hilow,
                    color = "red") #
 
 
-#
-install.packages("nycflights13")
+## 막대그래프 + 신뢰구간 95% 부트스트래핑 ------------------
+#install.packages("nycflights13")
 library(nycflights13)
 flights |> count(origin, dest) -> fligts_1origin
 fligts_1origin |> group_by(origin) |> 
@@ -65,21 +64,34 @@ fligts_1origin |> group_by(origin) |>
   # 2  JFK    1590  1964
   # 3  LGA    1539  2163
 
-#
+
+# 막대그래프 + 신뢰구간 95% 부트스트래핑
 fligts_1origin |> ggplot(aes(origin, n)) -> fligts_2
 fligts_2 + 
   stat_summary(geom = "bar", fun.y = "mean", 
                fill = "white", color = "black") +
   stat_summary(geom = "errorbar", 
                fun.data = mean_cl_boot, width = .2) +
-  scale_y_continuous(breaks = c(1200, 1400, 1600))
+  scale_y_continuous(breaks = c(0, 1200, 1400, 1600, 2000))
+
+# image save
+ggsave(path = "./chapter/09/", filename = "errorbar.png")
   
 #
 fligts_1origin |> summary()
+fligts_1origin$origin |> summary()
+fligts_1origin$origin |> table()
+fligts_1origin$dest |> table()
 
+fligts_1origin |> group_by(origin) |> 
+  summarise(mean = mean(n), 
+            sd = sd(n)) |> ggplot(aes(origin, mean)) +
+  geom_bar(stat = "identity")
 
+# image save
+ggsave(path = "./chapter/09/", "geom_bar.png")
 
-
+#
 
 
 
