@@ -14,10 +14,9 @@ library(gt)
 #dat 파일 열기
 # read.table("./dataset/chapter_15/Drug.dat", 
 #            header = T) -> drug
-read_delim("./dataset/chapter_15/Drug.dat") -> drug
+read_delim("./dataset/15/Drug.dat") -> drug
 
 #str()
-drug |> view()
 drug |> glimpse()
 drug |> str()
 drug |> hist()
