@@ -20,6 +20,7 @@ examdata
 #Exam ~ Anxiety
 examdata$Exam |> hist()
 examdata$Anxiety |> hist()
+
   #
 examdata$Exam |>qqPlot()
 examdata$Anxiety |> qqPlot()
@@ -69,12 +70,84 @@ cor.test(liardata$Creativity, liardata$Position,
          method = "spearman")
 
 #순서를 바꿀 경우 값은 같다
+
+liardata$Position |> qqPlot()
+liardata$Creativity |> qqPlot()
+shapiro.test(liardata$Creativity)
+
+
+#스피어만 --------------------------------------------------
+  #양측검정
 cor.test(liardata$Position, liardata$Creativity,
          method = "spearman")   #p-value 0.00172
 
-#단측검정
+  #단측검정
 cor.test(liardata$Position, liardata$Creativity,
          method = "spearman", 
          alternative = "less") #p-value 0.00086
+
+  
+#켄달
+  #양측검정
+cor.test(liardata$Position, liardata$Creativity,
+         method = "kendal")
+
+  #단측검정
+cor.test(liardata$Position, liardata$Creativity,
+         method = "kendal", alternative = "less")
+
+#피어슨
+cor.test(liardata$Position, liardata$Creativity, 
+         method = "pearson")
+
+#피어슨
+cor.test(liardata$Position, liardata$Creativity, 
+         method = "pearson", 
+         alternative = "greater")
+
+
+# 둘 중 한개만 정규성을 만족할 경우 어떤 상관을 해야 하는가?
+ggplot(data = liardata, aes(x = Position, y = Creativity)) +
+  geom_jitter(width = .1) +
+  geom_smooth(method = "lm")
+
+lm(liardata$Position ~ liardata$Creativity)
+lm(liardata$Creativity ~ liardata$Position)
+
+
+#답은? 점이연상관과 이연 상관계수
+read_csv("./dataset/06/pbcorr.csv") -> catdata
+
+catdata 
+  #time 고양이가 집밖에서 보낸 시간 hour
+  #gender 수컷 1, 암컷 0
+  #recode 성별을 반대로 부호화 수컷은 0, 암컷은 1
+
+shapiro.test(catdata$time) #정규성 x
+catdata$time |> qqPlot()
+
+#교재 time, gender 피어슨
+  #t 검정과 동일 p-value 0.0028
+cor.test(catdata$time, catdata$gender) #cor 0.378
+cor.test(catdata$time, catdata$recode) #cor -0.378 
+
+catdata$gender |> table() |> prop.table()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
