@@ -34,5 +34,4 @@ cor.test(examdata2$Exam, examdata2$Anxiety)
 (cor(examdata2$Exam, examdata2$Anxiety) -> examcor)
 examcor^2
 
-
 cor(examdata2)
