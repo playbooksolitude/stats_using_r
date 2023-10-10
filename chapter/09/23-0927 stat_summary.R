@@ -8,8 +8,6 @@ library(Hmisc)
 (read_delim("./dataset/09/SpiderLong.dat") -> spiderlong)
 (read_delim("./dataset/09/SpiderWide.dat") -> spiderwider)
 
-#
-spiderlong;spiderwider
 
 #독립설계 vs 반복측정 설계
 spiderlong |> glimpse()
@@ -56,7 +54,8 @@ bar + stat_summary(fun.data = median_hilow,
 #install.packages("nycflights13")
 library(nycflights13)
 flights |> count(origin, dest) -> fligts_1origin
-fligts_1origin |> group_by(origin) |> 
+fligts_1origin |> 
+  group_by(origin) |> 
   summarise(mean = mean(n), 
             sd = sd(n)) 
   #   origin  mean   sd
@@ -75,7 +74,7 @@ fligts_2 +
   scale_y_continuous(breaks = c(0, 1200, 1400, 1600, 2000))
 
 # image save
-ggsave(path = "./chapter/09/", filename = "errorbar.png")
+#ggsave(path = "./chapter/09/", filename = "errorbar.png")
   
 #
 fligts_1origin |> summary()
@@ -83,15 +82,14 @@ fligts_1origin$origin |> summary()
 fligts_1origin$origin |> table()
 fligts_1origin$dest |> table()
 
-fligts_1origin |> group_by(origin) |> 
+fligts_1origin |> 
+  group_by(origin) |> 
   summarise(mean = mean(n), 
-            sd = sd(n)) |> ggplot(aes(origin, mean)) +
+            sd = sd(n)) |> 
+  ggplot(aes(origin, mean)) +
   geom_bar(stat = "identity")
 
 # image save
-ggsave(path = "./chapter/09/", "geom_bar.png")
-
-#
-
+#ggsave(path = "./chapter/09/", "geom_bar.png")
 
 
