@@ -49,3 +49,39 @@ boot.ci(bootResults, type = "bca", index = 1)
 boot.ci(bootResults, type = "bca", index = 2)
 boot.ci(bootResults, type = "bca", index = 3)
 boot.ci(bootResults, type = "bca", index = 4)
+
+#
+gfr
+lm(change ~ music, data = gfr)
+lm(change ~ music, data = gfr)
+
+#
+crusty_v_NMA <- c(1,0,0,0)
+indie_v_NMA <- c(0,1,0,0)
+metal_v_NMA <- c(0,0,1,0)
+cbind(crusty_v_NMA, indie_v_NMA, 
+      metal_v_NMA) -> contrasts(gfr$music)
+
+gfr |> 
+  ggplot(aes(x = factor(ticknumb), y = day1, color = music)) +
+  geom_point() 
+
+
+#
+?contains
+gfr -> gfr2
+
+gfr2$day2 |> as.numeric() -> gfr2$day2
+gfr2$day3 |> as.numeric() -> gfr2$day3
+gfr2$change |> as.numeric() -> gfr2$change
+gfr2 |> glimpse()
+
+gfr2 |> 
+  pivot_longer(cols = !c(ticknumb:music), 
+               names_to = "name", 
+               values_to = "value") |> 
+  filter(name == "change") |> 
+  ggplot(aes(x = ticknumb, y = value, color = music)) + 
+  geom_point() +
+  geom_smooth(se = F)
+  
