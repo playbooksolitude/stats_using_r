@@ -92,3 +92,36 @@ album |>
 album |> filter(num %in% c("55", "188", "191")) #|> view()
 
 album |> filter(dffits < 1)
+
+#mpg dataset의 도시 연비, 고속도로 평균 연비
+mpg |> 
+  group_by(manufacturer, model) |> 
+  reframe(mean_cty = mean(cty), 
+          mean_hwy = mean(hwy)) |> 
+  mutate(num = row_number(), .before = 1) -> temp1
+
+temp1
+
+#도시 연비를 예측변수로 고속도로 연비를 예측하는 회귀모델
+lm(temp1$mean_hwy ~ temp1$mean_cty) -> temp2.model
+
+#통계량
+summary(temp2.model)
+
+#통계량을 보기 좋게 dataset에 추가하기
+fitted(temp2.model) -> temp1$predicted   #기울기의 fit point
+resid(temp2.model) -> temp1$resid        #잔차 (관측값과 기울기의 차이)
+rstandard(temp2.model) -> temp1$standard #표준화잔차
+rstudent(temp2.model) -> temp1$student   #스튜던트 잔차
+
+#그래프 그리기
+temp1 |> 
+  ggplot(aes(x = mean_cty, y = mean_hwy)) +
+  #geom_smooth(se = F) +
+  geom_smooth(se = F, method = "lm") +
+  geom_text(aes(label = num))
+
+#결과 확인
+temp1 |> filter(num %in% c("5", "29", "32", "37"))
+18.8 - (21.2)
+                
